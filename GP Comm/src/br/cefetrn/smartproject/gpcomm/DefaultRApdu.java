@@ -25,6 +25,11 @@ public class DefaultRApdu implements RApdu {
         this.data = data;
     }
     
+    public DefaultRApdu(RApdu another_response) {
+        sw = another_response.getSw();
+        data = another_response.getData();
+    }
+    
     public byte getSw1() {
         return (byte) (sw >> 8);
     }
