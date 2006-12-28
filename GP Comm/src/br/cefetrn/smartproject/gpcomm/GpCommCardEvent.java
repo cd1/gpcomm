@@ -9,7 +9,7 @@ public class GpCommCardEvent {
     private Date time;
     private GpCommCard card;
     
-    GpCommCardEvent(Date time, GpCommCard card) {
+    public GpCommCardEvent(Date time, GpCommCard card) {
         this.time = time;
         this.card = card;
     }
