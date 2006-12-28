@@ -1,34 +1,18 @@
 package br.cefetrn.smartproject.gpcomm;
 
-import java.util.List;
-
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
-public class GpCommTerminal {
-    private List<GpCommCardListener> listeners;
+public interface GpCommTerminal {
+    void addGpCommCardListener(GpCommCardListener listener);
     
-    public void addGpCommCardListener(GpCommCardListener listener) {
-        
-    }
+    void removeGpCommCardListener(GpCommCardListener listener);
     
-    public void removeGpCommCardListener(GpCommCardListener listener) {
-        
-    }
+    boolean isCardConnected();
     
-    public GpCommCard connect() {
-        return null;
-    }
+    void openTerminal();
     
-    public GpCommCard connect(long millis) {
-        return null;
-    }
+    void closeTerminal();
     
-    public boolean isConnected() {
-        return false;
-    }
-    
-    public String getDescription() {
-        return null;
-    }
+    String getName();
 }
