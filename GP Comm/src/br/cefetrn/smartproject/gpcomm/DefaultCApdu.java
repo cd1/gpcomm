@@ -66,6 +66,10 @@ public class DefaultCApdu implements CApdu {
         return le;
     }
 
+    public RApdu execute(GpCommCard card) throws GpCommException {
+        return card.execute(data);
+    }
+    
     public byte[] toByteArray() {
         ByteArrayOutputStream dump = new ByteArrayOutputStream();
         dump.write(getCla());
@@ -76,7 +80,7 @@ public class DefaultCApdu implements CApdu {
         try {
             dump.write(getData());
         }
-        catch (IOException e) {/* It'll never catch */}
+        catch (IOException e) {/* it'll never catch */}
         dump.write(getLe());
         return dump.toByteArray();
     }

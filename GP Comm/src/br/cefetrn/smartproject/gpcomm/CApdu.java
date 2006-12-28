@@ -18,5 +18,7 @@ public interface CApdu {
     
     byte getLe();
     
+    RApdu execute(GpCommCard card) throws GpCommException;
+    
     byte[] toByteArray();
 }
