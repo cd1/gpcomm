@@ -8,11 +8,14 @@ public class CSelect extends DefaultCApdu {
         if (aid == null) {
             throw new NullPointerException("AID can't be null");
         }
-        setCla((byte) 0x00);
         setIns((byte) 0xA4);
         setP1((byte) 0x04);
-        setP2((byte) 0x00);
         setData(aid);
-        setLe((byte) 0x00);
+    }
+    
+    public RApdu execute(GpCommCard card) throws GpCommException {
+        RApdu response = super.execute(card);
+        RSelect response_select = new RSelect(response);
+        return response_select;
     }
 }
