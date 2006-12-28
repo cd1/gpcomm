@@ -3,32 +3,14 @@ package br.cefetrn.smartproject.gpcomm;
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
-public class GpCommCard {
-    public void execute(CApdu command) {
-        execute(command.toByteArray());
-    }
+public interface GpCommCard {
+    RApdu execute(CApdu command) throws GpCommException;
     
-    public void execute(byte[] command) {
-        
-    }
+    RApdu execute(byte[] command) throws GpCommException;
     
-    public void close() {
-        
-    }
+    RDelete gpDelete(byte[] aid) throws GpCommException;
     
-    public boolean isClosed() {
-        return false;
-    }
-    
-    public RDelete gpDelete(byte[] aid) {
-        execute(new CDelete(aid));
-        return null;
-    }
-    
-    public RSelect gpSelect(byte[] aid) {
-        execute(new CSelect(aid));
-        return null;
-    }
+    RSelect gpSelect(byte[] aid) throws GpCommException;
     
     // E os outros comandos da GlobalPlatform...
 }
