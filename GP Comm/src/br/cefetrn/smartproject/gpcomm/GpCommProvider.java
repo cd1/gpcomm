@@ -7,4 +7,6 @@ import java.util.List;
  */
 public interface GpCommProvider {
     List<GpCommTerminal> getAvailableTerminals() throws GpCommException;
+
+    void close() throws GpCommException;
 }
