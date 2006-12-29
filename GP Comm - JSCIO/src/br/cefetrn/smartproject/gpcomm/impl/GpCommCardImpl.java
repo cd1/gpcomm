@@ -32,23 +32,13 @@ public class GpCommCardImpl implements GpCommCard {
     public RApdu execute(byte[] command) throws GpCommException {
         CardChannel channel = null;
         try {
-            channel = jscioCard.openLogicalChannel();
+            channel = jscioCard.getBasicChannel();
             ResponseAPDU response = channel.transmit(new CommandAPDU(command));
             return new DefaultRApdu((short) response.getSW(),
                     response.getData());
         }
         catch (CardException e) {
             throw new GpCommException(e);
-        }
-        finally {
-            if (channel != null) {
-                try {
-                    channel.close();
-                }
-                catch (CardException e) {
-                    throw new GpCommException(e);
-                }
-            }
         }
     }
 

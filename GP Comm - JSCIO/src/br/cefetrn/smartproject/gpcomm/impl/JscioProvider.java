@@ -5,6 +5,8 @@ import br.cefetrn.smartproject.gpcomm.GpCommProvider;
 import br.cefetrn.smartproject.gpcomm.GpCommTerminal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
@@ -13,6 +15,8 @@ import javax.smartcardio.TerminalFactory;
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
 public class JscioProvider implements GpCommProvider {
+    private static final Logger log =
+            Logger.getLogger(JscioProvider.class.getName());
     private TerminalFactory terminalFactory;
     
     public JscioProvider() {
@@ -31,6 +35,8 @@ public class JscioProvider implements GpCommProvider {
             return gpcomm_terminals;
         }
         catch (CardException e) {
+            log.log(Level.SEVERE, "Exception while fetching the available " +
+                    "terminals", e);
             throw new GpCommException(e);
         }
     }

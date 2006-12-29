@@ -1,12 +1,13 @@
 package br.cefetrn.smartproject.gpcomm.impl;
 
 import br.cefetrn.smartproject.gpcomm.GpCommCardEvent;
-import br.cefetrn.smartproject.gpcomm.GpCommCardEventType;
+import br.cefetrn.smartproject.gpcomm.GpCommCardEvent.Type;
 import br.cefetrn.smartproject.gpcomm.GpCommCardListener;
 import br.cefetrn.smartproject.gpcomm.GpCommTerminal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.smartcardio.Card;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
@@ -17,6 +18,8 @@ import javax.smartcardio.CardTerminal;
 public class GpCommTerminalImpl implements GpCommTerminal {
     CardTerminal jscioTerminal;
     
+    private static final Logger log =
+            Logger.getLogger(GpCommTerminalImpl.class.getName());
     private static final String DEFAULT_PROTOCOL = "T=0";
     private GpCommCardImpl gpcommCard;
     private List<GpCommCardListener> gpcommListeners;
@@ -34,6 +37,7 @@ public class GpCommTerminalImpl implements GpCommTerminal {
             throw new NullPointerException("Listener can't be null");
         }
         gpcommListeners.add(listener);
+        log.finer(gpcommListeners.size() + " active listeners in " + getName());
     }
 
     public void removeGpCommCardListener(GpCommCardListener listener) {
@@ -41,6 +45,7 @@ public class GpCommTerminalImpl implements GpCommTerminal {
             throw new NullPointerException("Listener can't be null");
         }
         gpcommListeners.remove(listener);
+        log.finer(gpcommListeners.size() + " active listeners in " + getName());
     }
 
     public boolean isCardConnected() {
@@ -59,7 +64,7 @@ public class GpCommTerminalImpl implements GpCommTerminal {
         return jscioTerminal.getName();
     }
 
-    private void fireEvent(GpCommCardEventType type) {
+    private void fireEvent(Type type) {
         GpCommCardEvent evt = new GpCommCardEvent(new Date(), gpcommCard);
         for (GpCommCardListener l : gpcommListeners) {
             switch (type) {
@@ -90,13 +95,13 @@ public class GpCommTerminalImpl implements GpCommTerminal {
                         }
                         Card card = jscioTerminal.connect(DEFAULT_PROTOCOL);
                         gpcommCard = new GpCommCardImpl(card);
-                        fireEvent(GpCommCardEventType.INSERTED);
+                        fireEvent(Type.INSERTED);
                     }
                     else {
                         while (jscioTerminal.waitForCardAbsent(TIMEOUT)) {
                             // wait...
                         }
-                        fireEvent(GpCommCardEventType.REMOVED);
+                        fireEvent(Type.REMOVED);
                         gpcommCard.jscioCard.disconnect(true);
                         gpcommCard = null;
                     }
