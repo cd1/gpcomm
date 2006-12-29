@@ -57,7 +57,7 @@ public class GpCommTerminalImpl implements GpCommTerminal {
     }
     
     public void closeTerminal() {
-        gpcommListenerThread.shouldContinue = false;
+        gpcommListenerThread.stop = true;
     }
 
     public String getName() {
@@ -80,17 +80,13 @@ public class GpCommTerminalImpl implements GpCommTerminal {
     
     class ListenerRunner extends Thread {
         private static final int TIMEOUT = 1000; // 1 second
-        private boolean shouldContinue;
-        
-        public ListenerRunner() {
-            shouldContinue = true;
-        }
+        private boolean stop;
         
         public void run() {
-            while (shouldContinue) {
+            while (!stop) {
                 try {
                     if (gpcommCard == null) {
-                        while (jscioTerminal.waitForCardPresent(TIMEOUT)) {
+                        while (!jscioTerminal.waitForCardPresent(TIMEOUT)) {
                             // wait...
                         }
                         Card card = jscioTerminal.connect(DEFAULT_PROTOCOL);
@@ -98,7 +94,7 @@ public class GpCommTerminalImpl implements GpCommTerminal {
                         fireEvent(Type.INSERTED);
                     }
                     else {
-                        while (jscioTerminal.waitForCardAbsent(TIMEOUT)) {
+                        while (!jscioTerminal.waitForCardAbsent(TIMEOUT)) {
                             // wait...
                         }
                         fireEvent(Type.REMOVED);
