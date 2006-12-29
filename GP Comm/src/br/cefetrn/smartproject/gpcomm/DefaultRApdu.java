@@ -17,17 +17,17 @@ public class DefaultRApdu implements RApdu {
     
     public DefaultRApdu(byte[] data) {
         sw = (short) 0x9000;
-        this.data = data;
+        this.data = (byte[]) data.clone();
     }
     
     public DefaultRApdu(short sw, byte[] data) {
         this.sw = sw;
-        this.data = data;
+        this.data = (byte[]) data.clone();
     }
     
     public DefaultRApdu(RApdu another_response) {
         sw = another_response.getSw();
-        data = another_response.getData();
+        data = (byte[]) another_response.getData().clone();
     }
     
     public byte getSw1() {
@@ -47,10 +47,19 @@ public class DefaultRApdu implements RApdu {
     }
 
     public void setData(byte[] data) {
-        this.data = data;
+        this.data = (byte[]) data.clone();
     }
     
     public byte[] getData() {
-        return data;
+        return (byte[]) data.clone();
+    }
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("sw=");
+        sb.append(Util.fromShortToString(sw));
+        sb.append(",data=");
+        sb.append(Util.fromByteArrayToString(data));
+        return sb.toString();
     }
 }
