@@ -2,6 +2,7 @@ package br.cefetrn.smartproject.gpcomm;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
@@ -13,6 +14,9 @@ public class DefaultCApdu implements CApdu {
     protected byte p2;
     protected byte[] data;
     protected byte le;
+    
+    private static final Logger log =
+            Logger.getLogger(DefaultCApdu.class.getName());
     
     public void setCla(byte cla) {
         this.cla = cla;
@@ -51,11 +55,11 @@ public class DefaultCApdu implements CApdu {
     }
 
     public void setData(byte[] data) {
-        this.data = data;
+        this.data = (byte[]) data.clone();
     }
     
     public byte[] getData() {
-        return data;
+        return (byte[]) data.clone();
     }
 
     public void setLe(byte le) {
@@ -67,7 +71,10 @@ public class DefaultCApdu implements CApdu {
     }
 
     public RApdu execute(GpCommCard card) throws GpCommException {
-        return card.execute(data);
+        log.fine(toString());
+        RApdu response = card.execute(toByteArray());
+        log.fine(response.toString());
+        return response;
     }
     
     public byte[] toByteArray() {
@@ -83,5 +90,24 @@ public class DefaultCApdu implements CApdu {
         catch (IOException e) {/* it'll never catch */}
         dump.write(getLe());
         return dump.toByteArray();
+    }
+    
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("cla=");
+        Util.appendByteAsString(cla, sb);
+        sb.append(",ins=");
+        Util.appendByteAsString(ins, sb);
+        sb.append(",p1=");
+        Util.appendByteAsString(p1, sb);
+        sb.append(",p2=");
+        Util.appendByteAsString(p2, sb);
+        sb.append(",lc=");
+        Util.appendByteAsString(getLc(), sb);
+        sb.append(",data=");
+        sb.append(Util.fromByteArrayToString(data));
+        sb.append(",le=");
+        Util.appendByteAsString(le, sb);
+        return sb.toString();
     }
 }
