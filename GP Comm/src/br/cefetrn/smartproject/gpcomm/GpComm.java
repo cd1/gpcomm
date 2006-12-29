@@ -10,6 +10,8 @@ import java.util.logging.Logger;
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
 public class GpComm {
+    public static final String PROPERTY_FILE_NAME = "gpcomm.properties";
+    
     private static final Logger log = Logger.getLogger(GpComm.class.getName());
     private GpCommProvider provider;
     private Properties properties;
@@ -27,15 +29,17 @@ public class GpComm {
     
     private void loadDefaultProperties() throws GpCommException {
         Properties props_file = new Properties();
-        InputStream props_file_stream = null;
+        InputStream props_file_stream =
+                getClass().getResourceAsStream("/" + PROPERTY_FILE_NAME);
         try {
-            props_file_stream =
-                    getClass().getResourceAsStream("gpcomm.properties");
+            if (props_file_stream == null) {
+                throw new GpCommException("Can't find " + PROPERTY_FILE_NAME);
+            }
             props_file.load(props_file_stream);
             properties = (Properties) props_file.clone();
         }
         catch (IOException e) {
-            // couldn't read gpcomm.properties
+            throw new GpCommException("Can't read " + PROPERTY_FILE_NAME, e);
         }
         finally {
             if (props_file_stream != null) {
@@ -43,7 +47,8 @@ public class GpComm {
                     props_file_stream.close();
                 }
                 catch (IOException e) {
-                    // couldn't close the property file stream
+                    throw new GpCommException("Couldn't close the stream of " +
+                            PROPERTY_FILE_NAME, e);
                 }
             }
         }
@@ -53,7 +58,8 @@ public class GpComm {
         String provider_class_name =
                 properties.getProperty(GpCommProperties.PROVIDER);
         if (provider_class_name == null) {
-            // couldn't read provider class property
+            throw new GpCommException("Can't find the property " +
+                    GpCommProperties.PROVIDER);
         }
         else {
             log.config("Found " + GpCommProperties.PROVIDER + "=" +
@@ -65,16 +71,21 @@ public class GpComm {
                 provider = provider_class.newInstance();
             }
             catch (ClassNotFoundException e) {
-                // couldn't find the provider class in the classpath
+                throw new GpCommException("Can't find the class " +
+                        provider_class_name, e);
             }
             catch (ClassCastException e) {
-                // the provider class doesn't implement GpCommProvider
+                throw new GpCommException("The class " + provider_class_name +
+                        " doesn't implement the interface " +
+                        GpCommProvider.class.getName(), e);
             }
             catch (IllegalAccessException e) {
-                // couldn't find the default constructor
+                throw new GpCommException("The class " + provider_class_name +
+                        " doesn't have a default constructor", e);
             }
             catch (InstantiationException e) {
-                // the provider class couldn't be instantiated
+                throw new GpCommException("The class " + provider_class_name +
+                        "couldn't be instantiated", e);
             }
         }
     }
@@ -85,5 +96,9 @@ public class GpComm {
     
     public Properties getProperties() {
         return (Properties) properties.clone();
+    }
+
+    public void close() throws GpCommException {
+        provider.close();
     }
 }
