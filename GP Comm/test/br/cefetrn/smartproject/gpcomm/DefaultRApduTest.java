@@ -44,7 +44,10 @@ public class DefaultRApduTest {
         byte[] my_data = new byte[] {(byte) 0x01, (byte) 0x02, (byte) 0x03,
                 (byte) 0x04};
         apdu.setData(my_data);
-        Assert.assertEquals(my_data, apdu.getData());
+        // JUnit doesn't compare two byte[] as arrays!!!
+        for (int i = 0; i < my_data.length; i++) {
+            Assert.assertEquals(my_data[i], apdu.getData()[i]);
+        }
         Assert.assertEquals("sw=0x1234,data=0x01 0x02 0x03 0x04",
                 apdu.toString());
     }
