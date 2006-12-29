@@ -4,26 +4,35 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
 public class GpComm {
+    private static final Logger log = Logger.getLogger(GpComm.class.getName());
     private GpCommProvider provider;
     private Properties properties;
     
-    public GpComm(Properties props) {
-        loadProperties(props);
+    public GpComm(Properties props) throws GpCommException {
+        loadDefaultProperties();
+        properties.putAll(props);
+        init();
     }
     
-    public GpComm() {
+    public GpComm() throws GpCommException {
+        loadDefaultProperties();
+        init();
+    }
+    
+    private void loadDefaultProperties() throws GpCommException {
         Properties props_file = new Properties();
         InputStream props_file_stream = null;
         try {
             props_file_stream =
                     getClass().getResourceAsStream("gpcomm.properties");
             props_file.load(props_file_stream);
-            loadProperties(props_file);
+            properties = (Properties) props_file.clone();
         }
         catch (IOException e) {
             // couldn't read gpcomm.properties
@@ -40,13 +49,15 @@ public class GpComm {
         }
     }
     
-    private void loadProperties(Properties props) {
+    private void init() throws GpCommException {
         String provider_class_name =
-                props.getProperty(GpCommProperties.PROVIDER);
+                properties.getProperty(GpCommProperties.PROVIDER);
         if (provider_class_name == null) {
             // couldn't read provider class property
         }
         else {
+            log.config("Found " + GpCommProperties.PROVIDER + "=" +
+                    provider_class_name);
             try {
                 Class<? extends GpCommProvider> provider_class =
                         (Class<? extends GpCommProvider>) Class.forName(
