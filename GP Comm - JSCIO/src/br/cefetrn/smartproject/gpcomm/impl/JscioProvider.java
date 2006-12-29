@@ -40,4 +40,8 @@ public class JscioProvider implements GpCommProvider {
             throw new GpCommException(e);
         }
     }
+
+    public void close() throws GpCommException {
+        // nothing to close
+    }
 }
