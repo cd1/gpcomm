@@ -15,7 +15,7 @@ public class DefaultCApdu implements CApdu {
     protected byte[] data;
     protected byte le;
     
-    private static final Logger log =
+    protected static final Logger log =
             Logger.getLogger(DefaultCApdu.class.getName());
     
     public void setCla(byte cla) {
@@ -83,12 +83,16 @@ public class DefaultCApdu implements CApdu {
         dump.write(getIns());
         dump.write(getP1());
         dump.write(getP2());
-        dump.write(getLc());
-        try {
-            dump.write(getData());
+        if (getLc() > (byte) 0) {
+            dump.write(getLc());
+            try {
+                dump.write(getData());
+            }
+            catch (IOException e) {/* it'll never catch */}
         }
-        catch (IOException e) {/* it'll never catch */}
-        dump.write(getLe());
+        if (getLe() > 0) {
+            dump.write(getLe());
+        }
         return dump.toByteArray();
     }
     
