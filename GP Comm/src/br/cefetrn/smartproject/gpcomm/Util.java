@@ -11,7 +11,7 @@ public class Util {
     private static final Logger log = Logger.getLogger(Util.class.getName());
     
     public static String fromByteArrayToString(byte[] array) {
-        if (array == null) {
+        if (array == null || array.length == 0) {
             return "null";
         }
         StringBuilder sb = new StringBuilder();
