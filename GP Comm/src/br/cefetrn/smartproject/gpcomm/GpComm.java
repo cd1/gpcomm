@@ -18,7 +18,12 @@ public class GpComm {
     
     public GpComm(Properties props) throws GpCommException {
         loadDefaultProperties();
-        properties.putAll(props);
+        if (properties == null) {
+            properties = (Properties) props.clone();
+        }
+        else {
+            properties.putAll(props);
+        }
         init();
     }
     
@@ -33,10 +38,12 @@ public class GpComm {
                 getClass().getResourceAsStream("/" + PROPERTY_FILE_NAME);
         try {
             if (props_file_stream == null) {
-                throw new GpCommException("Can't find " + PROPERTY_FILE_NAME);
+                log.info("Can't find " + PROPERTY_FILE_NAME);
             }
-            props_file.load(props_file_stream);
-            properties = (Properties) props_file.clone();
+            else {
+                props_file.load(props_file_stream);
+                properties = (Properties) props_file.clone();
+            }
         }
         catch (IOException e) {
             throw new GpCommException("Can't read " + PROPERTY_FILE_NAME, e);
