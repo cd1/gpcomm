@@ -7,6 +7,7 @@ import br.cefetrn.smartproject.gpcomm.GpCommTerminal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.Card;
 import javax.smartcardio.CardException;
@@ -86,16 +87,24 @@ public class GpCommTerminalImpl implements GpCommTerminal {
             while (!stop) {
                 try {
                     if (gpcommCard == null) {
-                        while (!jscioTerminal.waitForCardPresent(TIMEOUT)) {
+                        while (!jscioTerminal.waitForCardPresent(TIMEOUT) &&
+                                !stop) {
                             // wait...
+                        }
+                        if (stop) {
+                            break;
                         }
                         Card card = jscioTerminal.connect(DEFAULT_PROTOCOL);
                         gpcommCard = new GpCommCardImpl(card);
                         fireEvent(Type.INSERTED);
                     }
                     else {
-                        while (!jscioTerminal.waitForCardAbsent(TIMEOUT)) {
+                        while (!jscioTerminal.waitForCardAbsent(TIMEOUT) &&
+                                !stop) {
                             // wait...
+                        }
+                        if (stop) {
+                            break;
                         }
                         fireEvent(Type.REMOVED);
                         gpcommCard.jscioCard.disconnect(true);
@@ -103,7 +112,8 @@ public class GpCommTerminalImpl implements GpCommTerminal {
                     }
                 }
                 catch (CardException e) {
-                    // something happens here
+                    log.log(Level.SEVERE, "Exception while listening to the " +
+                            "card", e);
                 }
             }
         }
