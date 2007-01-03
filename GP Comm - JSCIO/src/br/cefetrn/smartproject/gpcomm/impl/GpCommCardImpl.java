@@ -7,8 +7,6 @@ import br.cefetrn.smartproject.gpcomm.DefaultRApdu;
 import br.cefetrn.smartproject.gpcomm.GpCommCard;
 import br.cefetrn.smartproject.gpcomm.GpCommException;
 import br.cefetrn.smartproject.gpcomm.RApdu;
-import br.cefetrn.smartproject.gpcomm.RDelete;
-import br.cefetrn.smartproject.gpcomm.RSelect;
 import javax.smartcardio.Card;
 import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardException;
@@ -26,14 +24,11 @@ public class GpCommCardImpl implements GpCommCard {
     }
     
     public RApdu execute(CApdu command) throws GpCommException {
-        return execute(command.toByteArray());
-    }
-
-    public RApdu execute(byte[] command) throws GpCommException {
         CardChannel channel = null;
         try {
             channel = jscioCard.getBasicChannel();
-            ResponseAPDU response = channel.transmit(new CommandAPDU(command));
+            ResponseAPDU response = channel.transmit(new CommandAPDU(
+                    command.toByteArray()));
             return new DefaultRApdu((short) response.getSW(),
                     response.getData());
         }
@@ -42,16 +37,11 @@ public class GpCommCardImpl implements GpCommCard {
         }
     }
 
-    public RDelete gpDelete(byte[] aid) throws GpCommException {
-        return executeInternal(new CDelete(aid));
+    public RApdu gpDelete(byte[] aid) throws GpCommException {
+        return execute(new CDelete(aid));
     }
 
-    public RSelect gpSelect(byte[] aid) throws GpCommException {
-        return executeInternal(new CSelect(aid));
-    }
-    
-    private <T extends RApdu> T executeInternal(CApdu c)
-            throws GpCommException {
-        return (T) c.execute(this);
+    public RApdu gpSelect(byte[] aid) throws GpCommException {
+        return execute(new CSelect(aid));
     }
 }
