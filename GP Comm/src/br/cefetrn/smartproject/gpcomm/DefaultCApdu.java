@@ -1,7 +1,9 @@
 package br.cefetrn.smartproject.gpcomm;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -15,8 +17,58 @@ public class DefaultCApdu implements CApdu {
     protected byte[] data;
     protected byte le;
     
-    protected static final Logger log =
+    private static Logger log =
             Logger.getLogger(DefaultCApdu.class.getName());
+    
+    public DefaultCApdu() {
+        // default
+    }
+    
+    public DefaultCApdu(byte[] command) throws GpCommException {
+        ByteArrayInputStream bais = new ByteArrayInputStream(command);
+        if (bais.available() < 4) {
+            throw new GpCommException("Invalid command APDU length: " +
+                    bais.available());
+        }
+        setCla((byte) bais.read());
+        setIns((byte) bais.read());
+        setP1((byte) bais.read());
+        setP2((byte) bais.read());
+        // case 1
+        if (bais.available() > 0) {
+            if (bais.available() == 1) { // case 2
+                setLe((byte) bais.read());
+            }
+            else {
+                byte lc = (byte) bais.read();
+                int read = bais.read(data, 0, lc);
+                // case 3
+                if (read < lc) {
+                    throw new GpCommException("Invalid LC field: found " +
+                            read + " bytes but was expected " + lc);
+                }
+                else {
+                    if (bais.available() > 0) { // case 4
+                        if (bais.available() == 1) {
+                            setLe((byte) bais.read());
+                        }
+                        else {
+                            if (bais.available() > 0) {
+                                String remaining_bytes =
+                                        Util.fromByteArrayToString(
+                                        Arrays.copyOfRange(command,
+                                        command.length - bais.available(),
+                                        command.length));
+                                log.warning("There were " + bais.available() +
+                                        " remaining bytes in the command " +
+                                        "APDU: " + remaining_bytes);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
     
     public void setCla(byte cla) {
         this.cla = cla;
@@ -69,13 +121,6 @@ public class DefaultCApdu implements CApdu {
     public byte getLe() {
         return le;
     }
-
-    public RApdu execute(GpCommCard card) throws GpCommException {
-        log.fine(toString());
-        RApdu response = card.execute(toByteArray());
-        log.fine(response.toString());
-        return response;
-    }
     
     public byte[] toByteArray() {
         ByteArrayOutputStream dump = new ByteArrayOutputStream();
@@ -109,7 +154,7 @@ public class DefaultCApdu implements CApdu {
         sb.append(",lc=");
         Util.appendByteAsString(getLc(), sb);
         sb.append(",data=");
-        sb.append(Util.fromByteArrayToString(data));
+        Util.appendByteArrayAsString(data, sb);
         sb.append(",le=");
         Util.appendByteAsString(le, sb);
         return sb.toString();
