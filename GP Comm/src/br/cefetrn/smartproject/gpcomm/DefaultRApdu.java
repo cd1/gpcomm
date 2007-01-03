@@ -57,9 +57,9 @@ public class DefaultRApdu implements RApdu {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("sw=");
-        sb.append(Util.fromShortToString(sw));
+        Util.appendShortAsString(sw, sb);
         sb.append(",data=");
-        sb.append(Util.fromByteArrayToString(data));
+        Util.appendByteArrayAsString(data, sb);
         return sb.toString();
     }
 }
