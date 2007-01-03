@@ -6,11 +6,9 @@ package br.cefetrn.smartproject.gpcomm;
 public interface GpCommCard {
     RApdu execute(CApdu command) throws GpCommException;
     
-    RApdu execute(byte[] command) throws GpCommException;
+    RApdu gpDelete(byte[] aid) throws GpCommException;
     
-    RDelete gpDelete(byte[] aid) throws GpCommException;
-    
-    RSelect gpSelect(byte[] aid) throws GpCommException;
+    RApdu gpSelect(byte[] aid) throws GpCommException;
     
     // E os outros comandos da GlobalPlatform...
 }
