@@ -10,7 +10,6 @@ public class CDelete extends DefaultCApdu {
     public CDelete() {
         setCla((byte) 0x80);
         setIns((byte) 0xE4);
-        setP2((byte) 0x00);
     }
     
     public CDelete(byte[] aid) {
