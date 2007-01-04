@@ -62,9 +62,11 @@ public class GpCommTerminalImpl implements GpCommTerminal {
         for (GpCommCardListener l : gpcommListeners) {
             switch (type) {
                 case INSERTED:
+                    log.finer("Card inserted.");
                     l.cardInserted(evt);
                     break;
                 case REMOVED:
+                    log.finer("Card removed.");
                     l.cardRemoved(evt);
                     break;
             }
@@ -108,7 +110,7 @@ public class GpCommTerminalImpl implements GpCommTerminal {
                     }
                 }
                 catch (CardException e) {
-                    log.log(Level.SEVERE, "Exception while listening to the " +
+                    log.log(Level.WARNING, "Exception while listening to the " +
                             "card", e);
                 }
             }
