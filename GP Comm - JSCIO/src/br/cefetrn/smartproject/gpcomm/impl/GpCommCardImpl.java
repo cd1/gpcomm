@@ -7,6 +7,7 @@ import br.cefetrn.smartproject.gpcomm.DefaultRApdu;
 import br.cefetrn.smartproject.gpcomm.GpCommCard;
 import br.cefetrn.smartproject.gpcomm.GpCommException;
 import br.cefetrn.smartproject.gpcomm.RApdu;
+import java.util.logging.Logger;
 import javax.smartcardio.Card;
 import javax.smartcardio.CardChannel;
 import javax.smartcardio.CardException;
@@ -19,6 +20,9 @@ import javax.smartcardio.ResponseAPDU;
 public class GpCommCardImpl implements GpCommCard {
     Card jscioCard;
     
+    private static Logger log =
+            Logger.getLogger(GpCommCardImpl.class.getName());
+    
     public GpCommCardImpl(Card card) {
         this.jscioCard = card;
     }
@@ -27,10 +31,13 @@ public class GpCommCardImpl implements GpCommCard {
         CardChannel channel = null;
         try {
             channel = jscioCard.getBasicChannel();
-            ResponseAPDU response = channel.transmit(new CommandAPDU(
+            log.fine("Command: " + command);
+            ResponseAPDU jscio_response = channel.transmit(new CommandAPDU(
                     command.toByteArray()));
-            return new DefaultRApdu((short) response.getSW(),
-                    response.getData());
+            RApdu gpcomm_response = new DefaultRApdu(
+                    (short) jscio_response.getSW(), jscio_response.getData());
+            log.fine("Response: " + gpcomm_response);
+            return gpcomm_response;
         }
         catch (CardException e) {
             throw new GpCommException(e);
