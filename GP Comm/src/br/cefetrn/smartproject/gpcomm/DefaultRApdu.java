@@ -8,26 +8,24 @@ public class DefaultRApdu implements RApdu {
     protected byte[] data;
     
     public DefaultRApdu() {
-        sw = (short) 0x9000;
+        this((short) 0x9000, null);
     }
     
     public DefaultRApdu(short sw) {
-        this.sw = sw;
+        this(sw, null);
     }
     
     public DefaultRApdu(byte[] data) {
-        sw = (short) 0x9000;
-        this.data = (byte[]) data.clone();
-    }
-    
-    public DefaultRApdu(short sw, byte[] data) {
-        this.sw = sw;
-        this.data = (byte[]) data.clone();
+        this((short) 0x9000, data);
     }
     
     public DefaultRApdu(RApdu another_response) {
-        sw = another_response.getSw();
-        data = (byte[]) another_response.getData().clone();
+        this(another_response.getSw(), another_response.getData());
+    }
+    
+    public DefaultRApdu(short sw, byte[] data) {
+        setSw(sw);
+        setData(data);
     }
     
     public byte getSw1() {
@@ -47,7 +45,9 @@ public class DefaultRApdu implements RApdu {
     }
 
     public void setData(byte[] data) {
-        this.data = (data == null) ? null : (byte[]) data.clone();
+        this.data = (data == null || data.length == 0)
+                ? null
+                : (byte[]) data.clone();
     }
     
     public byte[] getData() {
