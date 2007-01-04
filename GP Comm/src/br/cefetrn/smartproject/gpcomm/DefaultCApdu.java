@@ -54,14 +54,15 @@ public class DefaultCApdu implements CApdu {
                         }
                         else {
                             if (bais.available() > 0) {
-                                String remaining_bytes =
-                                        Util.fromByteArrayToString(
-                                        Arrays.copyOfRange(command,
+                                byte[] remaining_bytes =
+                                        new byte[bais.available()];
+                                System.arraycopy(command,
                                         command.length - bais.available(),
-                                        command.length));
+                                        remaining_bytes, 0, bais.available());
                                 log.warning("There were " + bais.available() +
                                         " remaining bytes in the command " +
-                                        "APDU: " + remaining_bytes);
+                                        "APDU: " + Util.fromByteArrayToString(
+                                        remaining_bytes));
                             }
                         }
                     }
