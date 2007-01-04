@@ -15,33 +15,43 @@ import javax.smartcardio.TerminalFactory;
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
 public class JscioProvider implements GpCommProvider {
+    TerminalFactory jscioTerminalFactory;
+    
     private static final Logger log =
             Logger.getLogger(JscioProvider.class.getName());
-    private TerminalFactory terminalFactory;
+    private List<GpCommTerminalImpl> gpcommTerminals;
     
     public JscioProvider() {
-        terminalFactory = TerminalFactory.getDefault();
+        jscioTerminalFactory = TerminalFactory.getDefault();
     }
     
     public List<GpCommTerminal> getAvailableTerminals() throws GpCommException {
         try {
             List<CardTerminal> jscio_terminals =
-                    terminalFactory.terminals().list();
-            List<GpCommTerminal> gpcomm_terminals =
+                    jscioTerminalFactory.terminals().list();
+            gpcommTerminals =
+                    new ArrayList<GpCommTerminalImpl>(jscio_terminals.size());
+            List<GpCommTerminal> gpcomm_terminals_temp =
                     new ArrayList<GpCommTerminal>(jscio_terminals.size());
             for (CardTerminal terminal : jscio_terminals) {
-                gpcomm_terminals.add(new GpCommTerminalImpl(terminal));
+                GpCommTerminalImpl i = new GpCommTerminalImpl(terminal);
+                gpcommTerminals.add(i);
+                gpcomm_terminals_temp.add(i);
             }
-            return gpcomm_terminals;
+            return gpcomm_terminals_temp;
         }
         catch (CardException e) {
-            log.log(Level.SEVERE, "Exception while fetching the available " +
+            log.log(Level.SEVERE, "Exception while loading the available " +
                     "terminals", e);
             throw new GpCommException(e);
         }
     }
 
     public void close() throws GpCommException {
-        // nothing to close
+        if (gpcommTerminals != null) {
+            for (GpCommTerminalImpl t : gpcommTerminals) {
+                t.listenerThread.setStop();
+            }
+        }
     }
 }
