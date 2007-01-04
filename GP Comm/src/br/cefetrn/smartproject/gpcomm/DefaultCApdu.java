@@ -3,7 +3,6 @@ package br.cefetrn.smartproject.gpcomm;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.logging.Logger;
 
 /**
@@ -17,7 +16,7 @@ public class DefaultCApdu implements CApdu {
     protected byte[] data;
     protected byte le;
 
-    private static Logger log =
+    private static final Logger log =
             Logger.getLogger(DefaultCApdu.class.getName());
     
     public DefaultCApdu() {
@@ -108,11 +107,13 @@ public class DefaultCApdu implements CApdu {
     }
 
     public void setData(byte[] data) {
-        this.data = (byte[]) data.clone();
+        this.data = (data == null || data.length == 0)
+                ? null
+                : (byte[]) data.clone();
     }
     
     public byte[] getData() {
-        return (byte[]) data.clone();
+        return (data == null) ? null : (byte[]) data.clone();
     }
 
     public void setLe(byte le) {
