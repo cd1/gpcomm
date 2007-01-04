@@ -16,7 +16,7 @@ public class DefaultCApdu implements CApdu {
     protected byte p2;
     protected byte[] data;
     protected byte le;
-    
+
     private static Logger log =
             Logger.getLogger(DefaultCApdu.class.getName());
     
@@ -123,22 +123,22 @@ public class DefaultCApdu implements CApdu {
     }
     
     public byte[] toByteArray() {
-        ByteArrayOutputStream dump = new ByteArrayOutputStream();
-        dump.write(getCla());
-        dump.write(getIns());
-        dump.write(getP1());
-        dump.write(getP2());
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        baos.write(getCla());
+        baos.write(getIns());
+        baos.write(getP1());
+        baos.write(getP2());
         if (getLc() > (byte) 0) {
-            dump.write(getLc());
+            baos.write(getLc());
             try {
-                dump.write(getData());
+                baos.write(getData());
             }
             catch (IOException e) {/* it'll never catch */}
         }
         if (getLe() > 0) {
-            dump.write(getLe());
+            baos.write(getLe());
         }
-        return dump.toByteArray();
+        return baos.toByteArray();
     }
     
     public String toString() {
