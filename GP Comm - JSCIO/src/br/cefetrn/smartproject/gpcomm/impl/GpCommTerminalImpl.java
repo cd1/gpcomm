@@ -18,19 +18,19 @@ import javax.smartcardio.CardTerminal;
  */
 public class GpCommTerminalImpl implements GpCommTerminal {
     CardTerminal jscioTerminal;
+    ListenerRunner listenerThread;
     
     private static final Logger log =
             Logger.getLogger(GpCommTerminalImpl.class.getName());
     private static final String DEFAULT_PROTOCOL = "T=0";
     private GpCommCardImpl gpcommCard;
     private List<GpCommCardListener> gpcommListeners;
-    private ListenerRunner gpcommListenerThread;
     
     public GpCommTerminalImpl(CardTerminal terminal) {
         jscioTerminal = terminal;
         gpcommListeners = new ArrayList<GpCommCardListener>();
-        gpcommListenerThread = new ListenerRunner();
-        openTerminal();
+        listenerThread = new ListenerRunner();
+        listenerThread.start();
     }
     
     public void addGpCommCardListener(GpCommCardListener listener) {
@@ -51,14 +51,6 @@ public class GpCommTerminalImpl implements GpCommTerminal {
 
     public boolean isCardConnected() {
         return (gpcommCard != null);
-    }
-    
-    public void openTerminal() {
-        gpcommListenerThread.start();
-    }
-    
-    public void closeTerminal() {
-        gpcommListenerThread.stop = true;
     }
 
     public String getName() {
@@ -82,6 +74,10 @@ public class GpCommTerminalImpl implements GpCommTerminal {
     class ListenerRunner extends Thread {
         private static final int TIMEOUT = 1000; // 1 second
         private boolean stop;
+        
+        public void setStop() {
+            stop = true;
+        }
         
         public void run() {
             while (!stop) {
