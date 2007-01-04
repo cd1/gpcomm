@@ -5,7 +5,6 @@ import br.cefetrn.smartproject.gpcomm.GpCommProvider;
 import br.cefetrn.smartproject.gpcomm.GpCommTerminal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
@@ -19,7 +18,7 @@ public class JscioProvider implements GpCommProvider {
     
     private static final Logger log =
             Logger.getLogger(JscioProvider.class.getName());
-    private List<GpCommTerminalImpl> gpcommTerminals;
+    private List<GpCommTerminal> gpcommTerminals;
     
     public JscioProvider() {
         jscioTerminalFactory = TerminalFactory.getDefault();
@@ -29,29 +28,26 @@ public class JscioProvider implements GpCommProvider {
         try {
             List<CardTerminal> jscio_terminals =
                     jscioTerminalFactory.terminals().list();
-            gpcommTerminals =
-                    new ArrayList<GpCommTerminalImpl>(jscio_terminals.size());
-            List<GpCommTerminal> gpcomm_terminals_temp =
-                    new ArrayList<GpCommTerminal>(jscio_terminals.size());
+            int terminals_count = jscio_terminals.size();
+            log.info("Found " + terminals_count + " terminal(s).");
+            gpcommTerminals = new ArrayList<GpCommTerminal>(terminals_count);
             for (CardTerminal terminal : jscio_terminals) {
                 GpCommTerminalImpl i = new GpCommTerminalImpl(terminal);
                 gpcommTerminals.add(i);
-                gpcomm_terminals_temp.add(i);
             }
-            return gpcomm_terminals_temp;
+            return gpcommTerminals;
         }
         catch (CardException e) {
-            log.log(Level.SEVERE, "Exception while loading the available " +
-                    "terminals", e);
             throw new GpCommException(e);
         }
     }
 
     public void close() throws GpCommException {
         if (gpcommTerminals != null) {
-            for (GpCommTerminalImpl t : gpcommTerminals) {
-                t.listenerThread.setStop();
+            for (GpCommTerminal t : gpcommTerminals) {
+                ((GpCommTerminalImpl) t).listenerThread.setStop();
             }
+            log.info("All terminals closed.");
         }
     }
 }
