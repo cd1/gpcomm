@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -42,7 +43,7 @@ public class GpComm {
             }
             else {
                 props_file.load(props_file_stream);
-                properties = (Properties) props_file.clone();
+                properties = props_file;
             }
         }
         catch (IOException e) {
@@ -54,7 +55,7 @@ public class GpComm {
                     props_file_stream.close();
                 }
                 catch (IOException e) {
-                    throw new GpCommException("Couldn't close the stream of " +
+                    log.log(Level.WARNING, "Couldn't close the stream of " +
                             PROPERTY_FILE_NAME, e);
                 }
             }
@@ -69,8 +70,7 @@ public class GpComm {
                     GpCommProperties.PROVIDER);
         }
         else {
-            log.config("Found " + GpCommProperties.PROVIDER + "=" +
-                    provider_class_name);
+            log.config(GpCommProperties.PROVIDER + "=" + provider_class_name);
             try {
                 Class<? extends GpCommProvider> provider_class =
                         (Class<? extends GpCommProvider>) Class.forName(
