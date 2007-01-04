@@ -10,9 +10,5 @@ public interface GpCommTerminal {
     
     boolean isCardConnected();
     
-    void openTerminal();
-    
-    void closeTerminal();
-    
     String getName();
 }
