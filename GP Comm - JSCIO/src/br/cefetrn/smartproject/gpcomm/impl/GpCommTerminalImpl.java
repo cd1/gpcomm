@@ -105,13 +105,22 @@ public class GpCommTerminalImpl implements GpCommTerminal {
                             break;
                         }
                         fireEvent(Type.REMOVED);
-                        gpcommCard.jscioCard.disconnect(true);
                         gpcommCard = null;
                     }
                 }
                 catch (CardException e) {
                     log.log(Level.WARNING, "Exception while listening to the " +
                             "card", e);
+                }
+            }
+            if (gpcommCard != null) {
+                try {
+                    gpcommCard.jscioCard.disconnect(true);
+                    gpcommCard = null;
+                }
+                catch (CardException e) {
+                    log.log(Level.WARNING, "Exception while stopping to " +
+                            "listen to the card", e);
                 }
             }
         }
