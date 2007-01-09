@@ -107,4 +107,41 @@ public class Util {
         }
         sb.append(tmp);
     }
+    
+    /**
+     * Generates a short value using two bytes.
+     * 
+     * @param b1 The most significant byte.
+     * @param b2 The least significant byte.
+     * @return A short value, in the form [b1 b2].
+     */
+    public static short makeShort(byte b1, byte b2) {
+        return (short) ((b1 << 8) + b2);
+    }
+    
+    /**
+     * Generates a short value using two bytes inside an array.
+     * 
+     * @param array An array of bytes, with {@code array.length >= 2}.
+     * @param offset The offset of the most significant byte of the short value.
+     * The least significant byte will be the following byte.
+     * @return A short value.
+     */
+    public short getShort(byte[] array, int offset) {
+        return makeShort(array[offset], array[offset + 1]);
+    }
+    
+    /**
+     * Puts a short value inside an array of bytes.
+     * 
+     * @param array An array of bytes, with {@code array.length >= 2}.
+     * @param offset The offset in where the most significant byte of
+     * {@code value} will be put. The least significant byte of {@code value}
+     * will be put in the following location.
+     * @param value The short value that will be put inside {@code array}.
+     */
+    public static void setShort(byte[] array, int offset, short value) {
+        array[offset] = (byte) (value >> 8);
+        array[offset + 1] = (byte) (value & 0xFF);
+    }
 }
