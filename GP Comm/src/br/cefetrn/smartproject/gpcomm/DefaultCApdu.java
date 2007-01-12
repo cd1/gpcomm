@@ -32,7 +32,7 @@ public class DefaultCApdu implements CApdu {
      * Creates a new command with all the bytes zeroed.
      */
     public DefaultCApdu() {
-        // default
+        data = new byte[0];
     }
     
     /**
@@ -48,6 +48,7 @@ public class DefaultCApdu implements CApdu {
      * specified in the LC field.
      */
     public DefaultCApdu(byte[] command) {
+        this();
         ByteArrayInputStream bais = new ByteArrayInputStream(command);
         if (bais.available() < 4) {
             throw new IllegalArgumentException("Invalid command APDU length: " +
@@ -64,6 +65,7 @@ public class DefaultCApdu implements CApdu {
             }
             else {
                 byte lc = (byte) bais.read();
+                data = new byte[lc];
                 int read = bais.read(data, 0, lc);
                 // case 3
                 if (read < lc) {
@@ -158,17 +160,14 @@ public class DefaultCApdu implements CApdu {
     /**
      * Changes the data field.
      * 
-     * @param data The data field. If {@code data.length == 0}, then the data
-     * will be {@code null}.
+     * @param data The data field.
      */
     public void setData(byte[] data) {
-        this.data = (data == null || data.length == 0)
-                ? null
-                : (byte[]) data.clone();
+        this.data = (data == null) ? new byte[0] : (byte[]) data.clone();
     }
     
     public byte[] getData() {
-        return (data == null) ? null : (byte[]) data.clone();
+        return (byte[]) data.clone();
     }
 
     /**
@@ -213,19 +212,19 @@ public class DefaultCApdu implements CApdu {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("cla=");
-        Util.appendByteAsString(cla, sb);
+        Util.appendByteAsString(getCla(), sb);
         sb.append(",ins=");
-        Util.appendByteAsString(ins, sb);
+        Util.appendByteAsString(getIns(), sb);
         sb.append(",p1=");
-        Util.appendByteAsString(p1, sb);
+        Util.appendByteAsString(getP1(), sb);
         sb.append(",p2=");
-        Util.appendByteAsString(p2, sb);
+        Util.appendByteAsString(getP2(), sb);
         sb.append(",lc=");
         Util.appendByteAsString(getLc(), sb);
         sb.append(",data=");
-        Util.appendByteArrayAsString(data, sb);
+        Util.appendByteArrayAsString(getData(), sb);
         sb.append(",le=");
-        Util.appendByteAsString(le, sb);
+        Util.appendByteAsString(getLe(), sb);
         return sb.toString();
     }
 }
