@@ -1,8 +1,10 @@
 package br.cefetrn.smartproject.gpcomm.impl;
 
+import br.cefetrn.smartproject.gpcomm.GpCommCard;
 import br.cefetrn.smartproject.gpcomm.GpCommCardEvent;
 import br.cefetrn.smartproject.gpcomm.GpCommCardEvent.Type;
 import br.cefetrn.smartproject.gpcomm.GpCommCardListener;
+import br.cefetrn.smartproject.gpcomm.GpCommException;
 import br.cefetrn.smartproject.gpcomm.GpCommTerminal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,10 +51,30 @@ public class GpCommTerminalImpl implements GpCommTerminal {
         log.finer(gpcommListeners.size() + " active listeners in " + getName());
     }
 
-    public boolean isCardConnected() {
-        return (gpcommCard != null);
+    public boolean isCardConnected() throws GpCommException {
+        try {
+            return jscioTerminal.isCardPresent();
+        }
+        catch (CardException e) {
+            throw new GpCommException(e);
+        }
     }
 
+    public GpCommCard connect(long millis) throws GpCommException {
+        try {
+            if (jscioTerminal.waitForCardPresent(millis)) {
+                Card card = jscioTerminal.connect(DEFAULT_PROTOCOL);
+                return new GpCommCardImpl(card);
+            }
+            else {
+                return null;
+            }
+        }
+        catch (CardException e) {
+            throw new GpCommException(e);
+        }
+    }
+    
     public String getName() {
         return jscioTerminal.getName();
     }
