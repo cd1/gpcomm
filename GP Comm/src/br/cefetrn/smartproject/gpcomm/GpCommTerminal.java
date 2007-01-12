@@ -8,7 +8,9 @@ public interface GpCommTerminal {
     
     void removeGpCommCardListener(GpCommCardListener listener);
     
-    boolean isCardConnected();
+    boolean isCardConnected() throws GpCommException;
+    
+    GpCommCard connect(long millis) throws GpCommException;
     
     String getName();
 }
