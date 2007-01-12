@@ -72,7 +72,6 @@ public class Util {
      */
     public static void appendByteAsString(byte b, StringBuilder sb) {
         String tmp = Integer.toHexString(b & 0xFF).toUpperCase();
-        sb.append("0x");
         if (tmp.length() == 1) {
             sb.append("0");
         }
@@ -99,7 +98,6 @@ public class Util {
      * @see #fromShortToString(byte)
      */
     public static void appendShortAsString(short s, StringBuilder sb) {
-        sb.append("0x");
         String tmp = Integer.toHexString(s & 0xFFFF).toUpperCase();
         int n_zeros = 4 - tmp.length();
         for (int i = 0; i < n_zeros; i++) {
