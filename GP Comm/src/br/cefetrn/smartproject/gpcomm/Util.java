@@ -40,14 +40,15 @@ public class Util {
         if (array == null) {
             sb.append("null");
         }
+        else if (array.length == 0) {
+            sb.append("<empty>");
+        }
         else {
             for (byte b : array) {
                 appendByteAsString(b, sb);
                 sb.append(" ");
             }
-            if (sb.length() > 0) { // all the cases, except when array = byte[0]
-                sb.deleteCharAt(sb.length() - 1); // deletes the last space
-            }
+            sb.deleteCharAt(sb.length() - 1); // deletes the last space
         }
     }
     
