@@ -47,11 +47,11 @@ public class DefaultRApdu implements RApdu {
     }
 
     public void setData(byte[] data) {
-        this.data = (data == null) ? new byte[0] : (byte[]) data.clone();
+        this.data = (data == null) ? new byte[0] : data.clone();
     }
     
     public byte[] getData() {
-        return (byte[]) data.clone();
+        return data.clone();
     }
     
     public String toString() {

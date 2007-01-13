@@ -165,11 +165,11 @@ public class DefaultCApdu implements CApdu {
      * will be {@code null}.
      */
     public void setData(byte[] data) {
-        this.data = (data == null) ? new byte[0] : (byte[]) data.clone();
+        this.data = (data == null) ? new byte[0] : data.clone();
     }
     
     public byte[] getData() {
-        return (byte[]) data.clone();
+        return data.clone();
     }
 
     /**
