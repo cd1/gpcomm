@@ -1,8 +1,5 @@
 package br.cefetrn.smartproject.gpcomm.apdu;
 
-import br.cefetrn.smartproject.gpcomm.LifeCycle;
-import br.cefetrn.smartproject.gpcomm.Privileges;
-
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
