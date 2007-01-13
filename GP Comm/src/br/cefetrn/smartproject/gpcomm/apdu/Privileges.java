@@ -1,4 +1,4 @@
-package br.cefetrn.smartproject.gpcomm;
+package br.cefetrn.smartproject.gpcomm.apdu;
 
 import java.util.HashSet;
 import java.util.Set;
