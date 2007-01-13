@@ -1,7 +1,5 @@
 package br.cefetrn.smartproject.gpcomm.apdu;
 
-import br.cefetrn.smartproject.gpcomm.CardElement;
-import br.cefetrn.smartproject.gpcomm.LifeCycle;
 import br.cefetrn.smartproject.gpcomm.Util;
 import java.util.ArrayList;
 import java.util.Collection;
