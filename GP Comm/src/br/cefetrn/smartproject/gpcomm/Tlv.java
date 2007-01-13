@@ -44,14 +44,14 @@ public class Tlv {
     }
     
     public byte[] getValue() {
-        return (byte[]) value.clone();
+        return value.clone();
     }
     
     public void setValue(byte[] value) {
         if (value == null) {
             value = new byte[0];
         }
-        this.value = (byte[]) value.clone();
+        this.value = value.clone();
     }
     
     public byte[] toByteArray() {
