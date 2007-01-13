@@ -125,7 +125,7 @@ public class Util {
      * The least significant byte will be the following byte.
      * @return A short value.
      */
-    public short getShort(byte[] array, int offset) {
+    public static short getShort(byte[] array, int offset) {
         return makeShort(array[offset], array[offset + 1]);
     }
     
