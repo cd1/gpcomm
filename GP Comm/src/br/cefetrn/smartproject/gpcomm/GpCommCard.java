@@ -1,5 +1,8 @@
 package br.cefetrn.smartproject.gpcomm;
 
+import br.cefetrn.smartproject.gpcomm.apdu.CApdu;
+import br.cefetrn.smartproject.gpcomm.apdu.RApdu;
+
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
