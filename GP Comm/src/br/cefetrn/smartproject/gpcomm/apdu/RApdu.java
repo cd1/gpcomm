@@ -1,4 +1,4 @@
-package br.cefetrn.smartproject.gpcomm;
+package br.cefetrn.smartproject.gpcomm.apdu;
 
 /**
  * An interface that represents a response APDU.

@@ -1,5 +1,6 @@
-package br.cefetrn.smartproject.gpcomm;
+package br.cefetrn.smartproject.gpcomm.apdu;
 
+import br.cefetrn.smartproject.gpcomm.Util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -160,7 +161,8 @@ public class DefaultCApdu implements CApdu {
     /**
      * Changes the data field.
      * 
-     * @param data The data field.
+     * @param data The data field. If {@code data.length == 0}, then the data
+     * will be {@code null}.
      */
     public void setData(byte[] data) {
         this.data = (data == null) ? new byte[0] : (byte[]) data.clone();

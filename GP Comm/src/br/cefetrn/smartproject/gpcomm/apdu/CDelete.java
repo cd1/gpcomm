@@ -1,4 +1,4 @@
-package br.cefetrn.smartproject.gpcomm;
+package br.cefetrn.smartproject.gpcomm.apdu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -9,6 +9,9 @@ import java.io.IOException;
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
 public class CDelete extends DefaultCApdu {
+    public static final byte CLA_DELETE = (byte) 0x80;
+    public static final byte INS_DELETE = (byte) 0xE4;
+    
     /**
      * Creates a new object with a specified AID.
      * 
@@ -16,8 +19,8 @@ public class CDelete extends DefaultCApdu {
      * @throws NullPointerException if {@code aid} is {@code null}.
      */
     public CDelete(byte[] aid) {
-        setCla((byte) 0x80);
-        setIns((byte) 0xE4);
+        setCla(CLA_DELETE);
+        setIns(INS_DELETE);
         setAid(aid);
     }
     

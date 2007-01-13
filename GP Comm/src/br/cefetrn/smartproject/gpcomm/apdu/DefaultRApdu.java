@@ -1,4 +1,6 @@
-package br.cefetrn.smartproject.gpcomm;
+package br.cefetrn.smartproject.gpcomm.apdu;
+
+import br.cefetrn.smartproject.gpcomm.Util;
 
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
