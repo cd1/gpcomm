@@ -7,12 +7,14 @@ import java.io.IOException;
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
 public class Tlv {
+    public static final byte DEFAULT_TAG = (byte) 0x00;
+    
     private static final byte[] ZERO_LENGTH_BYTE_ARRAY = new byte[0];
     private byte tag;
     private byte[] value;
     
     public Tlv() {
-        setTag((byte) 0x00);
+        setTag(DEFAULT_TAG);
         setValue(ZERO_LENGTH_BYTE_ARRAY);
     }
     
@@ -42,14 +44,14 @@ public class Tlv {
     }
     
     public byte[] getValue() {
-        return value;
+        return (byte[]) value.clone();
     }
     
     public void setValue(byte[] value) {
         if (value == null) {
             value = new byte[0];
         }
-        this.value = value;
+        this.value = (byte[]) value.clone();
     }
     
     public byte[] toByteArray() {
