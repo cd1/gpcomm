@@ -1,7 +1,6 @@
 package br.cefetrn.smartproject.gpcomm.apdu;
 
 import br.cefetrn.smartproject.gpcomm.GpCommException;
-import br.cefetrn.smartproject.gpcomm.SecurityLevel;
 
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
