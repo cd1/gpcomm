@@ -6,7 +6,7 @@ import br.cefetrn.smartproject.gpcomm.Util;
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
 public class DefaultRApdu implements RApdu {
-    protected short sw;
+    protected byte[] sw;
     protected byte[] data;
     
     public DefaultRApdu() {
@@ -26,24 +26,25 @@ public class DefaultRApdu implements RApdu {
     }
     
     public DefaultRApdu(short sw, byte[] data) {
+        sw = new byte[2];
         setSw(sw);
         setData(data);
     }
     
     public byte getSw1() {
-        return (byte) (sw >> 8);
+        return sw[0];
     }
 
     public byte getSw2() {
-        return (byte) (sw & 0xFF);
+        return sw[1];
     }
 
     public void setSw(short sw) {
-        this.sw = sw;
+        Util.setShort(this.sw, 0, sw);
     }
     
     public short getSw() {
-        return sw;
+        return Util.getShort(sw, 0);
     }
 
     public void setData(byte[] data) {
@@ -57,7 +58,7 @@ public class DefaultRApdu implements RApdu {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("sw=");
-        Util.appendShortAsString(sw, sb);
+        Util.appendByteArrayAsString(sw, sb);
         sb.append(",data=");
         Util.appendByteArrayAsString(data, sb);
         return sb.toString();
