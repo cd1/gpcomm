@@ -26,7 +26,7 @@ public class DefaultRApdu implements RApdu {
     }
     
     public DefaultRApdu(short sw, byte[] data) {
-        sw = new byte[2];
+        this.sw = new byte[2];
         setSw(sw);
         setData(data);
     }
