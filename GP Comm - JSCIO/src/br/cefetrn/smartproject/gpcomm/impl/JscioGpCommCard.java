@@ -19,13 +19,13 @@ import javax.smartcardio.ResponseAPDU;
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
-public class GpCommCardImpl implements GpCommCard {
+public class JscioGpCommCard implements GpCommCard {
     Card jscioCard;
     
     private static final Logger log =
-            Logger.getLogger(GpCommCardImpl.class.getName());
+            Logger.getLogger(JscioGpCommCard.class.getName());
     
-    public GpCommCardImpl(Card card) {
+    public JscioGpCommCard(Card card) {
         this.jscioCard = card;
     }
     

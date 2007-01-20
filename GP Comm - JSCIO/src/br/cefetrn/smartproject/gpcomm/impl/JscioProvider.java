@@ -32,7 +32,7 @@ public class JscioProvider implements GpCommProvider {
             log.info("Found " + terminals_count + " terminal(s).");
             gpcommTerminals = new ArrayList<GpCommTerminal>(terminals_count);
             for (CardTerminal terminal : jscio_terminals) {
-                GpCommTerminalImpl i = new GpCommTerminalImpl(terminal);
+                JscioGpCommTerminal i = new JscioGpCommTerminal(terminal);
                 gpcommTerminals.add(i);
             }
             return gpcommTerminals;
@@ -45,7 +45,7 @@ public class JscioProvider implements GpCommProvider {
     public void close() throws GpCommException {
         if (gpcommTerminals != null) {
             for (GpCommTerminal t : gpcommTerminals) {
-                ((GpCommTerminalImpl) t).listenerThread.setStop();
+                ((JscioGpCommTerminal) t).listenerThread.setStop();
             }
             log.info("All terminals closed.");
         }

@@ -18,17 +18,17 @@ import javax.smartcardio.CardTerminal;
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
-public class GpCommTerminalImpl implements GpCommTerminal {
+public class JscioGpCommTerminal implements GpCommTerminal {
     CardTerminal jscioTerminal;
     ListenerRunner listenerThread;
     
     private static final Logger log =
-            Logger.getLogger(GpCommTerminalImpl.class.getName());
+            Logger.getLogger(JscioGpCommTerminal.class.getName());
     private static final String DEFAULT_PROTOCOL = "T=0";
-    private GpCommCardImpl gpcommCard;
+    private JscioGpCommCard gpcommCard;
     private List<GpCommCardListener> gpcommListeners;
     
-    public GpCommTerminalImpl(CardTerminal terminal) {
+    public JscioGpCommTerminal(CardTerminal terminal) {
         jscioTerminal = terminal;
         gpcommListeners = new ArrayList<GpCommCardListener>();
         listenerThread = new ListenerRunner();
@@ -64,7 +64,7 @@ public class GpCommTerminalImpl implements GpCommTerminal {
         try {
             if (jscioTerminal.waitForCardPresent(millis)) {
                 Card card = jscioTerminal.connect(DEFAULT_PROTOCOL);
-                return new GpCommCardImpl(card);
+                return new JscioGpCommCard(card);
             }
             else {
                 return null;
@@ -115,7 +115,7 @@ public class GpCommTerminalImpl implements GpCommTerminal {
                             break;
                         }
                         Card card = jscioTerminal.connect(DEFAULT_PROTOCOL);
-                        gpcommCard = new GpCommCardImpl(card);
+                        gpcommCard = new JscioGpCommCard(card);
                         fireEvent(Type.INSERTED);
                     }
                     else {
