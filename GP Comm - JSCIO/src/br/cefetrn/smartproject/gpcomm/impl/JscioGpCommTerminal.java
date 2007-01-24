@@ -15,9 +15,6 @@ import javax.smartcardio.Card;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 
-/**
- * @author Crístian Deives <cristiandeives@gmail.com>
- */
 public class JscioGpCommTerminal implements GpCommTerminal {
     CardTerminal jscioTerminal;
     ListenerRunner listenerThread;

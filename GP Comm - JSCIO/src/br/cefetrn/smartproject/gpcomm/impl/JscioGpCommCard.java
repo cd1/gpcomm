@@ -6,6 +6,8 @@ import br.cefetrn.smartproject.gpcomm.apdu.CApdu;
 import br.cefetrn.smartproject.gpcomm.apdu.CDelete;
 import br.cefetrn.smartproject.gpcomm.apdu.CSelect;
 import br.cefetrn.smartproject.gpcomm.apdu.DefaultRApdu;
+import br.cefetrn.smartproject.gpcomm.apdu.InstallData;
+import br.cefetrn.smartproject.gpcomm.apdu.InstallType;
 import br.cefetrn.smartproject.gpcomm.apdu.RApdu;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,10 +17,6 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 
-
-/**
- * @author Crístian Deives <cristiandeives@gmail.com>
- */
 public class JscioGpCommCard implements GpCommCard {
     Card jscioCard;
     
@@ -56,5 +54,13 @@ public class JscioGpCommCard implements GpCommCard {
 
     public RApdu gpSelect(byte[] aid) throws GpCommException {
         return execute(new CSelect(aid));
+    }
+
+    public RApdu gpInstall(InstallType type, InstallData data) throws GpCommException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    public RApdu gpLoad(boolean lastBlock, byte blockNumber, byte[] loadData) throws GpCommException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

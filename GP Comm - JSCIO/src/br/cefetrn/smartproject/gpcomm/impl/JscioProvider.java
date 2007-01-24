@@ -10,9 +10,6 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
 
-/**
- * @author Crístian Deives <cristiandeives@gmail.com>
- */
 public class JscioProvider implements GpCommProvider {
     TerminalFactory jscioTerminalFactory;
     
