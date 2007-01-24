@@ -29,7 +29,7 @@ public class CSelect extends DefaultCApdu {
      * @return An AID.
      */
     public byte[] getAid() {
-        return data;
+        return data.clone();
     }
     
     /**
@@ -41,6 +41,6 @@ public class CSelect extends DefaultCApdu {
         if (aid == null) {
             throw new NullPointerException("AID can't be null");
         }
-        setData(aid);
+        setData(aid.clone());
     }
 }

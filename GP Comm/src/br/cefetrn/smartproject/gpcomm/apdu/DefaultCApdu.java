@@ -106,6 +106,7 @@ public class DefaultCApdu implements CApdu {
         this.cla = cla;
     }
     
+    @Override
     public byte getCla() {
         return cla;
     }
@@ -119,6 +120,7 @@ public class DefaultCApdu implements CApdu {
         this.ins = ins;
     }
     
+    @Override
     public byte getIns() {
         return ins;
     }
@@ -132,6 +134,7 @@ public class DefaultCApdu implements CApdu {
         this.p1 = p1;
     }
     
+    @Override
     public byte getP1() {
         return p1;
     }
@@ -145,6 +148,7 @@ public class DefaultCApdu implements CApdu {
         this.p2 = p2;
     }
     
+    @Override
     public byte getP2() {
         return p2;
     }
@@ -154,6 +158,7 @@ public class DefaultCApdu implements CApdu {
      * 
      * @return The LC byte. This field is always calculated.
      */
+    @Override
     public byte getLc() {
         return (byte) ((data == null) ? 0 : data.length);
     }
@@ -168,6 +173,7 @@ public class DefaultCApdu implements CApdu {
         this.data = (data == null) ? new byte[0] : data.clone();
     }
     
+    @Override
     public byte[] getData() {
         return data.clone();
     }
@@ -181,10 +187,12 @@ public class DefaultCApdu implements CApdu {
         this.le = le;
     }
     
+    @Override
     public byte getLe() {
         return le;
     }
     
+    @Override
     public byte[] toByteArray() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         baos.write(getCla());
@@ -198,9 +206,7 @@ public class DefaultCApdu implements CApdu {
             }
             catch (IOException e) {/* it'll never catch */}
         }
-        if (getLe() > 0) {
-            baos.write(getLe());
-        }
+        baos.write(getLe());
         return baos.toByteArray();
     }
     
@@ -211,6 +217,7 @@ public class DefaultCApdu implements CApdu {
      * @see Util#fromByteToString
      * @see Util#fromByteArrayToString
      */
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("cla=");

@@ -6,7 +6,7 @@ package br.cefetrn.smartproject.gpcomm.apdu;
 public enum SecurityLevel {
     ENCRYPTION_AND_MAC((byte) 0x03),
     MAC((byte) 0x01),
-    NO_SECUTIRY((byte) 0x00);
+    NO_SECURITY((byte) 0x00);
 
     private byte value;
 

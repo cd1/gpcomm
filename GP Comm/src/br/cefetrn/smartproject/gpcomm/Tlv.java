@@ -18,6 +18,11 @@ public class Tlv {
         setValue(ZERO_LENGTH_BYTE_ARRAY);
     }
     
+    public Tlv(byte tag, byte[] value) {
+        setTag(tag);
+        setValue(value);
+    }
+    
     public Tlv(byte[] data) {
         if (data == null || data.length < 2) {
             throw new IllegalArgumentException("data must be at least 2 " +

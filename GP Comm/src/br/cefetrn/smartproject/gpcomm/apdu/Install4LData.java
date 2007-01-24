@@ -6,7 +6,7 @@ import java.io.IOException;
 /**
  * @author Crístian Deives <cristiandeives@gmail.com>
  */
-public class Install4LoadData implements InstallData {
+public class Install4LData implements InstallData {
     private static byte[] ZERO_LENGTH_BYTE_ARRAY = new byte[0];
     private byte[] executableLoadFileAid;
     private byte[] loadFileAid;
@@ -15,7 +15,7 @@ public class Install4LoadData implements InstallData {
     private byte[] parameters;
     
     
-    public Install4LoadData(byte[] loadFileAid) {
+    public Install4LData(byte[] loadFileAid) {
         executableLoadFileAid = ZERO_LENGTH_BYTE_ARRAY;
         this.loadFileAid = loadFileAid;
         loadToken = ZERO_LENGTH_BYTE_ARRAY;
