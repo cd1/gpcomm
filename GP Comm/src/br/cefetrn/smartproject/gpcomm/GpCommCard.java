@@ -19,6 +19,7 @@ public interface GpCommCard {
      * @param command A command APDU. It must not be {@code null}.
      * @return The response APDU of the executed command.
      * @throws GpCommException If some error occurs when executing the command.
+     * @see br.cefetrn.smartproject.gpcomm.apdu.CApdu#toByteArray()
      */
     RApdu execute(CApdu command) throws GpCommException;
     

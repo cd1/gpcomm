@@ -4,8 +4,9 @@ import java.util.List;
 
 /**
  * This is the main interface of the communication provider. The class that
- * implements this interface must be set in the property "gpcomm.provider" when
- * creating a new instance of {@link GpComm}.
+ * implements this interface must have a no-arg constructor and must be set in
+ * the property "gpcomm.provider" when creating a new instance of
+ * {@link GpComm}.
  * 
  * @author Crístian Deives <cristiandeives@gmail.com>
  * @version 1.0 2007-01-29
