@@ -29,10 +29,8 @@ public class GpComm {
      * @param pros Some GP Comm properties.
      * @throws GPCommException If something goes wrong while initializing GP
      * Comm.
-     * @throws IOException If there is an error while reading the properties
-     * file.
      */
-    public GpComm(Properties props) throws GpCommException, IOException {
+    public GpComm(Properties props) throws GpCommException {
         loadDefaultProperties();
         if (properties == null) {
             properties = (Properties) props.clone();
@@ -48,21 +46,16 @@ public class GpComm {
      * 
      * @throws GPCommException If something goes wrong while initializing GP
      * Comm.
-     * @throws IOException If there is an error while reading the properties
-     * file.
      */
-    public GpComm() throws GpCommException, IOException {
+    public GpComm() throws GpCommException {
         loadDefaultProperties();
         init();
     }
     
     /**
-     * Try to read the properties file and load them.
-     * 
-     * @throws IOException If there is an error while reading the properties
-     * file.
+     * Try to read the properties file and load it.
      */
-    private void loadDefaultProperties() throws IOException {
+    private void loadDefaultProperties() {
         Properties props_file = new Properties();
         InputStream props_file_stream =
                 getClass().getResourceAsStream("/" + PROPERTY_FILE_NAME);
@@ -74,6 +67,9 @@ public class GpComm {
                 props_file.load(props_file_stream);
                 properties = props_file;
             }
+        }
+        catch (IOException e) {
+            log.log(Level.WARNING, "Couldn't read " + PROPERTY_FILE_NAME, e);
         }
         finally {
             if (props_file_stream != null) {
