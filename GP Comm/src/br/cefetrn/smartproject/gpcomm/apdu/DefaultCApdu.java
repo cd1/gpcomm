@@ -199,8 +199,8 @@ public class DefaultCApdu implements CApdu {
         baos.write(getIns());
         baos.write(getP1());
         baos.write(getP2());
-        if (getLc() > (byte) 0) {
-            baos.write(getLc());
+        if (data.length > (byte) 0) {
+            baos.write(data.length);
             try {
                 baos.write(getData());
             }
