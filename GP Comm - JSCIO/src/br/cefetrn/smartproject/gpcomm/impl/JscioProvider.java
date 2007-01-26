@@ -10,17 +10,30 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 import javax.smartcardio.TerminalFactory;
 
+/**
+ * The provider class for the Java Smart Card I/O API. This provider only works
+ * in Java SE 6.
+ * 
+ * @author Crístian Deives <cristiandeives@gmail.com>
+ * @version 1.0 2007-01-29
+ */
 public class JscioProvider implements GpCommProvider {
+    /** The terminal factory. */
     TerminalFactory jscioTerminalFactory;
-    
     private static final Logger log =
             Logger.getLogger(JscioProvider.class.getName());
     private List<GpCommTerminal> gpcommTerminals;
     
+    /**
+     * Creates a new instance of this class and initializes the terminal
+     * factory.
+     */
     public JscioProvider() {
         jscioTerminalFactory = TerminalFactory.getDefault();
     }
     
+    /** {@inheritDoc} */
+    @Override
     public List<GpCommTerminal> getAvailableTerminals() throws GpCommException {
         try {
             List<CardTerminal> jscio_terminals =
@@ -39,6 +52,8 @@ public class JscioProvider implements GpCommProvider {
         }
     }
 
+    /** {@inheritDoc} */
+    @Override
     public void close() throws GpCommException {
         if (gpcommTerminals != null) {
             for (GpCommTerminal t : gpcommTerminals) {

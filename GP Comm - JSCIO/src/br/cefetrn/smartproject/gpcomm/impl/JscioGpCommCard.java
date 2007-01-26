@@ -17,16 +17,27 @@ import javax.smartcardio.CardException;
 import javax.smartcardio.CommandAPDU;
 import javax.smartcardio.ResponseAPDU;
 
+/**
+ * @author Crístian Deives <cristiandeives@gmail.com>
+ * @version 1.0 2007-01-29
+ */
 public class JscioGpCommCard implements GpCommCard {
+    /** The actual JSCIO card object. */
     Card jscioCard;
-    
     private static final Logger log =
             Logger.getLogger(JscioGpCommCard.class.getName());
     
+    /**
+     * Creates a new instance of this class.
+     * 
+     * @param card A valid JSCIO card object.
+     */
     public JscioGpCommCard(Card card) {
         this.jscioCard = card;
     }
     
+    /** {@inheritDoc} */
+    @Override
     public RApdu execute(CApdu command) throws GpCommException {
         CardChannel channel = null;
         try {
@@ -48,19 +59,63 @@ public class JscioGpCommCard implements GpCommCard {
         }
     }
 
+    /** {@inheritDoc} */
+    @Override
     public RApdu gpDelete(byte[] aid) throws GpCommException {
         return execute(new CDelete(aid));
     }
 
+    /** {@inheritDoc} */
+    @Override
     public RApdu gpSelect(byte[] aid) throws GpCommException {
         return execute(new CSelect(aid));
     }
 
+    /** {@inheritDoc} */
+    @Override
     public RApdu gpInstall(InstallType type, InstallData data) throws GpCommException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /** {@inheritDoc} */
+    @Override
     public RApdu gpLoad(boolean lastBlock, byte blockNumber, byte[] loadData) throws GpCommException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public RApdu gpExternalAuthenticate() throws GpCommException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public RApdu gpGetData() throws GpCommException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public RApdu gpGetStatus() throws GpCommException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public RApdu gpInitializeUpdate() throws GpCommException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public RApdu gpPutKey() throws GpCommException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public RApdu gpSetStatus() throws GpCommException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 }

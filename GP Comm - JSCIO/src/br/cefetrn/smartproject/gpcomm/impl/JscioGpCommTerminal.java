@@ -15,8 +15,16 @@ import javax.smartcardio.Card;
 import javax.smartcardio.CardException;
 import javax.smartcardio.CardTerminal;
 
+/**
+ * This class represents a JSCIO terminal for GP Comm.
+ * 
+ * @author Crístian Deives <cristiandeives@gmail.com>
+ * @version 1.0 2007-01-29
+ */
 public class JscioGpCommTerminal implements GpCommTerminal {
+    /** The actual terminal. */
     CardTerminal jscioTerminal;
+    /** The thread that listens to this terminal. */
     ListenerRunner listenerThread;
     
     private static final Logger log =
@@ -25,6 +33,12 @@ public class JscioGpCommTerminal implements GpCommTerminal {
     private JscioGpCommCard gpcommCard;
     private List<GpCommCardListener> gpcommListeners;
     
+    /**
+     * Creates a new instance of this terminal, converting a JSCIO terminal
+     * to a GP Comm terminal and start the listener thread.
+     * 
+     * @param terminal A valid JSCIO terminal.
+     */
     public JscioGpCommTerminal(CardTerminal terminal) {
         jscioTerminal = terminal;
         gpcommListeners = new ArrayList<GpCommCardListener>();
@@ -32,6 +46,8 @@ public class JscioGpCommTerminal implements GpCommTerminal {
         listenerThread.start();
     }
     
+    /** {@inheritDoc} */
+    @Override
     public void addGpCommCardListener(GpCommCardListener listener) {
         if (listener == null) {
             throw new NullPointerException("Listener can't be null");
@@ -40,6 +56,8 @@ public class JscioGpCommTerminal implements GpCommTerminal {
         log.finer(gpcommListeners.size() + " active listeners in " + getName());
     }
 
+    /** {@inheritDoc} */
+    @Override
     public void removeGpCommCardListener(GpCommCardListener listener) {
         if (listener == null) {
             throw new NullPointerException("Listener can't be null");
@@ -48,6 +66,8 @@ public class JscioGpCommTerminal implements GpCommTerminal {
         log.finer(gpcommListeners.size() + " active listeners in " + getName());
     }
 
+    /** {@inheritDoc} */
+    @Override
     public boolean isCardConnected() throws GpCommException {
         try {
             return jscioTerminal.isCardPresent();
@@ -57,6 +77,8 @@ public class JscioGpCommTerminal implements GpCommTerminal {
         }
     }
 
+    /** {@inheritDoc} */
+    @Override
     public GpCommCard connect(long millis) throws GpCommException {
         try {
             if (jscioTerminal.waitForCardPresent(millis)) {
@@ -72,6 +94,8 @@ public class JscioGpCommTerminal implements GpCommTerminal {
         }
     }
     
+    /** {@inheritDoc} */
+    @Override
     public String getName() {
         return jscioTerminal.getName();
     }
@@ -92,14 +116,28 @@ public class JscioGpCommTerminal implements GpCommTerminal {
         }
     }
     
+    /**
+     * The thread that listens to a terminal. It keeps executing untill the
+     * method {@link br.cefetrn.smartproject.gpcomm.GpComm#close()} is called.
+     */
     class ListenerRunner extends Thread {
-        private static final int TIMEOUT = 1000; // 1 second
+        public static final int TIMEOUT = 1000; // 1 second
         private boolean stop;
         
+        /**
+         * Tells this thread to stop running.
+         */
         public void setStop() {
             stop = true;
         }
         
+        /**
+         * Keeps waiting for insertion and removal of a card in this terminal.
+         * After one of these events happens, the corresponding methods in the
+         * available listeners are called.
+         * It'll only stop with a call to the method {@link setStop()}.
+         */
+        @Override
         public void run() {
             while (!stop) {
                 try {
