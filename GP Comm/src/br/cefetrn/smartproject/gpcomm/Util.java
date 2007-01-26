@@ -1,5 +1,7 @@
 package br.cefetrn.smartproject.gpcomm;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * A class with helper methods to convert byte and short values to String, and
  * String to byte and short values. Every String returned or used by the methods
@@ -31,6 +33,27 @@ public class Util {
         StringBuilder sb = new StringBuilder();
         appendByteArrayAsString(array, sb);
         return sb.toString();
+    }
+    
+    /**
+     * Converts a String to an array of bytes. The String must be formed with
+     * bytes represented in hexadecimal, and each value must be separated by a
+     * colon.
+     * 
+     * @param s A String containing several byte values in hexadecimal.
+     * @return The array representation of {@code s}, or {@code null} if
+     * {@code s == null}.
+     */
+    public static byte[] toByteArray(String s) {
+        if (s == null) {
+            return null;
+        }
+        String[] bytes = s.split(":");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream(bytes.length);
+        for (String b : bytes) {
+            baos.write(toByte(b));
+        }
+        return baos.toByteArray();
     }
     
     /**
@@ -70,7 +93,7 @@ public class Util {
     }
     
     public static byte toByte(String s) {
-        return Byte.parseByte(s, HEXADECIMAL_RADIX);
+        return (byte) Integer.parseInt(s, HEXADECIMAL_RADIX);
     }
     
     /**
@@ -101,7 +124,7 @@ public class Util {
     }
     
     public static short toShort(String s) {
-        return Short.parseShort(s, HEXADECIMAL_RADIX);
+        return (short) Integer.parseInt(s, HEXADECIMAL_RADIX);
     }
     
     /**
