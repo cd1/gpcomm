@@ -87,7 +87,7 @@ public class DefaultCApdu implements CApdu {
                                         remaining_bytes, 0, bais.available());
                                 log.warning("There were " + bais.available() +
                                         " remaining bytes in the command " +
-                                        "APDU: " + Util.fromByteArrayToString(
+                                        "APDU: " + Util.toString(
                                         remaining_bytes));
                             }
                         }

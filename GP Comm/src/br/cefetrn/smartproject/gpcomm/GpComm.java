@@ -8,16 +8,31 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * GP Comm main class. This class is used to obtain the terminals installed on
+ * the computer.
+ * 
  * @author Crístian Deives <cristiandeives@gmail.com>
+ * @version 1.0 2007-01-29
  */
 public class GpComm {
+    /** The name of the properties file. */
     public static final String PROPERTY_FILE_NAME = "gpcomm.properties";
     
     private static final Logger log = Logger.getLogger(GpComm.class.getName());
     private GpCommProvider provider;
     private Properties properties;
     
-    public GpComm(Properties props) throws GpCommException {
+    /**
+     * Initializes GP Comm, reading the properties from the properties file and
+     * overwriting them with the specified properties.
+     * 
+     * @param pros Some GP Comm properties.
+     * @throws GPCommException If something goes wrong while initializing GP
+     * Comm.
+     * @throws IOException If there is an error while reading the properties
+     * file.
+     */
+    public GpComm(Properties props) throws GpCommException, IOException {
         loadDefaultProperties();
         if (properties == null) {
             properties = (Properties) props.clone();
@@ -28,12 +43,26 @@ public class GpComm {
         init();
     }
     
-    public GpComm() throws GpCommException {
+    /**
+     * Initializes GP Comm, reading the properties from the properties file.
+     * 
+     * @throws GPCommException If something goes wrong while initializing GP
+     * Comm.
+     * @throws IOException If there is an error while reading the properties
+     * file.
+     */
+    public GpComm() throws GpCommException, IOException {
         loadDefaultProperties();
         init();
     }
     
-    private void loadDefaultProperties() throws GpCommException {
+    /**
+     * Try to read the properties file and load them.
+     * 
+     * @throws IOException If there is an error while reading the properties
+     * file.
+     */
+    private void loadDefaultProperties() throws IOException {
         Properties props_file = new Properties();
         InputStream props_file_stream =
                 getClass().getResourceAsStream("/" + PROPERTY_FILE_NAME);
@@ -45,9 +74,6 @@ public class GpComm {
                 props_file.load(props_file_stream);
                 properties = props_file;
             }
-        }
-        catch (IOException e) {
-            throw new GpCommException("Can't read " + PROPERTY_FILE_NAME, e);
         }
         finally {
             if (props_file_stream != null) {
@@ -62,6 +88,12 @@ public class GpComm {
         }
     }
     
+    /**
+     * Initialize GP Commm, based on the properties loaded.
+     * 
+     * @throws GPCommException If something goes wrong while initializing GP
+     * Comm.
+     */
     private void init() throws GpCommException {
         String provider_class_name =
                 properties.getProperty(GpCommProperties.PROVIDER);
@@ -97,14 +129,34 @@ public class GpComm {
         }
     }
     
+    /**
+     * Reads all the available terminals connected to the computer.
+     * 
+     * @return A list of terminals, or an empty list if there is no terminal
+     * available.
+     * @throws GpCommException If there is an error while fecthing the
+     * terminals.
+     */
     public List<GpCommTerminal> getAvailableTerminals() throws GpCommException {
         return provider.getAvailableTerminals();
     }
     
+    /**
+     * Obtains a copy of the properties used in this instance of GP Comm.
+     * 
+     * @return The GP Comm properties that were used to initialize this object.
+     */
     public Properties getProperties() {
         return (Properties) properties.clone();
     }
 
+    /**
+     * Finalize GP Comm and cleans its resources. This method MUST be called to
+     * every instance created.
+     * 
+     * @throws GpCommException If there is an error while closing this GP Comm
+     * instance.
+     */
     public void close() throws GpCommException {
         provider.close();
     }

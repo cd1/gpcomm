@@ -1,28 +1,33 @@
 package br.cefetrn.smartproject.gpcomm;
 
 /**
- * A class with auxiliary methods to convert byte and short values to String, in
- * hexadecimal. A byte value will be formatted with exactly two characters and a
- * short value will be converted in exactly four characters. The String "0x"
- * will be prepended in every value and all the six letters will appear in upper
- * case.
+ * A class with helper methods to convert byte and short values to String, and
+ * String to byte and short values. Every String returned or used by the methods
+ * of this class are represented in hexadecimal. A byte value must be formatted
+ * with exactly two characters and a short value must be formatted with exactly
+ * four characters. All the six letters used by the hexadecimal notation will
+ * appear in upper case.
  * 
  * @author Crístian Deives <cristiandeives@gmail.com>
+ * @version 1.0 2007-01-29
  */
 public class Util {
+    /** The radix of the hexadecimal notation. */
+    public static final int HEXADECIMAL_RADIX = 16;
+    
     private Util() {
         // no instantiation
     }
     
     /**
      * Converts an array of bytes to a String. Each byte will be separated by
-     * one space.
+     * one colon.
      * 
      * @param array An array of bytes.
      * @return The String convertion of {@code array}.
-     * @see #fromByteToString(byte)
+     * @see #toString(byte)
      */
-    public static String fromByteArrayToString(byte[] array) {
+    public static String toString(byte[] array) {
         StringBuilder sb = new StringBuilder();
         appendByteArrayAsString(array, sb);
         return sb.toString();
@@ -34,7 +39,7 @@ public class Util {
      * 
      * @param array An array of bytes.
      * @param sb An existing StringBuilder.
-     * @see #fromByteArrayToString(byte[])
+     * @see #toString(byte[])
      */
     public static void appendByteArrayAsString(byte[] array, StringBuilder sb) {
         if (array == null) {
@@ -46,7 +51,7 @@ public class Util {
         else {
             for (byte b : array) {
                 appendByteAsString(b, sb);
-                sb.append(" ");
+                sb.append(":");
             }
             sb.deleteCharAt(sb.length() - 1); // deletes the last space
         }
@@ -58,10 +63,14 @@ public class Util {
      * @param b A byte.
      * @return A String containing the byte {@code b} formatted in hexadecimal.
      */
-    public static String fromByteToString(byte b) {
-        StringBuilder sb = new StringBuilder(4); // 0xXX
+    public static String toString(byte b) {
+        StringBuilder sb = new StringBuilder(2);
         appendByteAsString(b, sb);
         return sb.toString();
+    }
+    
+    public static byte toByte(String s) {
+        return Byte.parseByte(s, HEXADECIMAL_RADIX);
     }
     
     /**
@@ -69,7 +78,7 @@ public class Util {
      * 
      * @param b A byte value.
      * @param sb An existing StringBuilder.
-     * @see #fromByteToString(byte)
+     * @see #toString(byte)
      */
     public static void appendByteAsString(byte b, StringBuilder sb) {
         String tmp = Integer.toHexString(b & 0xFF).toUpperCase();
@@ -85,10 +94,14 @@ public class Util {
      * @param s A short value.
      * @return A String containing the short {@code s} formatted in hexadecimal.
      */
-    public static String fromShortToString(short s) {
-        StringBuilder sb = new StringBuilder(6); // 0xXXXX
+    public static String toString(short s) {
+        StringBuilder sb = new StringBuilder(4);
         appendShortAsString(s, sb);
         return sb.toString();
+    }
+    
+    public static short toShort(String s) {
+        return Short.parseShort(s, HEXADECIMAL_RADIX);
     }
     
     /**
@@ -96,7 +109,7 @@ public class Util {
      * 
      * @param s A short value.
      * @param sb An existing StringBuilder.
-     * @see #fromShortToString(byte)
+     * @see #toString(byte)
      */
     public static void appendShortAsString(short s, StringBuilder sb) {
         String tmp = Integer.toHexString(s & 0xFFFF).toUpperCase();
@@ -115,7 +128,7 @@ public class Util {
      * @return A short value, in the form [b1 b2].
      */
     public static short makeShort(byte b1, byte b2) {
-        return (short) ((b1 << 8) + b2);
+        return (short) ((b1 << Byte.SIZE) + b2);
     }
     
     /**
@@ -140,7 +153,7 @@ public class Util {
      * @param value The short value that will be put inside {@code array}.
      */
     public static void setShort(byte[] array, int offset, short value) {
-        array[offset] = (byte) (value >> 8);
+        array[offset] = (byte) (value >> Byte.SIZE);
         array[offset + 1] = (byte) (value & 0xFF);
     }
 }

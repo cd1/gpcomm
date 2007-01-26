@@ -21,7 +21,7 @@ public class DefaultRApduTest {
     public void defaultValues() {
         Assert.assertEquals((short) 0x9000, apdu.getSw());
         Assert.assertEquals(0, apdu.getData().length);
-        Assert.assertEquals("sw=9000,data=<empty>", apdu.toString());
+        Assert.assertEquals("sw=90:00,data=<empty>", apdu.toString());
     }
     
     @Test
@@ -31,11 +31,11 @@ public class DefaultRApduTest {
         apdu.setSw((short) 0x1234);
         Assert.assertEquals((byte) 0x12, apdu.getSw1());
         Assert.assertEquals((byte) 0x34, apdu.getSw2());
-        Assert.assertEquals("sw=1234,data=<empty>", apdu.toString());
+        Assert.assertEquals("sw=12:34,data=<empty>", apdu.toString());
         apdu.setSw((short) 0x0000);
         Assert.assertEquals((byte) 0x00, apdu.getSw1());
         Assert.assertEquals((byte) 0x00, apdu.getSw2());
-        Assert.assertEquals("sw=0000,data=<empty>", apdu.toString());
+        Assert.assertEquals("sw=00:00,data=<empty>", apdu.toString());
     }
     
     @Test
@@ -47,7 +47,7 @@ public class DefaultRApduTest {
                 (byte) 0x04};
         apdu.setData(my_data);
         Assert.assertTrue(Arrays.equals(my_data, apdu.getData()));
-        Assert.assertEquals("sw=1234,data=01 02 03 04",
+        Assert.assertEquals("sw=12:34,data=01:02:03:04",
                 apdu.toString());
     }
 }

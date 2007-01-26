@@ -4,54 +4,87 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 /**
+ * A data structure that represents a TLV object. It must contain the tag field,
+ * which is a number of up to 4 bytes; the length of the value field, also with
+ * 4 bytes; and the value field, limited by the length field.
+ * 
  * @author Crístian Deives <cristiandeives@gmail.com>
+ * @version 1.0 2007-01-29
  */
 public class Tlv {
-    public static final byte DEFAULT_TAG = (byte) 0x00;
+    /** The default tag, used when no ta is specified. */
+    public static final int DEFAULT_TAG = 0;
     
+    /** A zero-length byte array, created once to decrease memory footprint. */
     private static final byte[] ZERO_LENGTH_BYTE_ARRAY = new byte[0];
-    private byte tag;
+    /** The tag. */
+    private int tag;
+    /** The value. */
     private byte[] value;
     
+    /**
+     * Creates a new TLV object, with the default tag and no value.
+     * 
+     * @see #DEFAULT_TAG
+     */
     public Tlv() {
         setTag(DEFAULT_TAG);
         setValue(ZERO_LENGTH_BYTE_ARRAY);
     }
     
-    public Tlv(byte tag, byte[] value) {
+    /**
+     * Creates a new TLV object, with the specified tag and value.
+     * 
+     * @param tag The tag of the object.
+     * @param value The value of the object.
+     */
+    public Tlv(int tag, byte[] value) {
         setTag(tag);
         setValue(value);
     }
     
-    public Tlv(byte[] data) {
-        if (data == null || data.length < 2) {
-            throw new IllegalArgumentException("data must be at least 2 " +
-                    "bytes long");
-        }
-        setTag(data[0]);
-        byte length = data[1];
-        if (length > data.length + 2) {
-            throw new IllegalArgumentException("invalid length: " + length);
-        }
-        System.arraycopy(data, 2, value, 0, length);
-    }
-    
-    public byte getTag() {
+    /**
+     * Obtains the tag of this object.
+     * 
+     * @return The tag of the TLV object.
+     */
+    public int getTag() {
         return tag;
     }
     
-    public void setTag(byte tag) {
+    /**
+     * Changes the tag of this object.
+     * 
+     * @param tag The new tag.
+     */
+    public void setTag(int tag) {
         this.tag = tag;
     }
     
-    public byte getLength() {
-        return (byte) value.length;
+    /**
+     * Obtains the length of the value of this object.
+     * 
+     * @return The length of the TLV object.
+     */
+    public int getLength() {
+        return value.length;
     }
     
+    /**
+     * Obtains the value of this object.
+     * 
+     * @return The value of the TLV object.
+     */
     public byte[] getValue() {
         return value.clone();
     }
     
+    /**
+     * Changes the value of this object.
+     * 
+     * @param value The new value. If this parameter is {@code null}, there will
+     * be no value.
+     */
     public void setValue(byte[] value) {
         if (value == null) {
             value = new byte[0];
@@ -59,6 +92,12 @@ public class Tlv {
         this.value = value.clone();
     }
     
+    /**
+     * Converts this object into a byte array, in the proper sequence
+     * tag-length-value.
+     * 
+     * @return The array representation of this TLV object.
+     */
     public byte[] toByteArray() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         baos.write(tag);
@@ -70,6 +109,7 @@ public class Tlv {
         return baos.toByteArray();
     }
     
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
